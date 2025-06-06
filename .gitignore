@@ -1,0 +1,16 @@
+# Environment
+.env
+*.env
+
+# Terraform State
+terraform.tfstate
+terraform.tfstate.*
+*.tfstate.backup
+
+# Terraform working dir
+.terraform/
+.terraform.lock.hcl
+
+# Optional: Shell state
+*.log
+*.out
