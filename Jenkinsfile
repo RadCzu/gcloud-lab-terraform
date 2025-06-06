@@ -24,6 +24,7 @@ pipeline {
           withCredentials([file(credentialsId: 'gcloud-sa-key', variable: 'GCP_KEY')]) {
             echo "Authenticating with GCP..."
             sh '''
+              echo $HOME
               gcloud auth activate-service-account --key-file=$GCP_KEY
               gcloud config set project your-project-id
             '''
