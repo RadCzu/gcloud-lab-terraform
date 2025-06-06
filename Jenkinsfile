@@ -4,7 +4,7 @@ pipeline {
     }
     agent {
         docker {
-            image 'radeczu/node-with-jq'
+            image 'radeczu/node-with-jq:terraform'
             args '--add-host=host.docker.internal:host-gateway -e DOCKER_HOST=tcp://host.docker.internal:2375'
         }
     }
