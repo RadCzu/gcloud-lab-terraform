@@ -27,7 +27,7 @@ pipeline {
             sh '''
               echo $HOME
               gcloud auth activate-service-account --key-file=$GCP_KEY
-              gcloud config set project 333066469576
+              gcloud config set project devopstraining-459716
             '''
           }
         }
