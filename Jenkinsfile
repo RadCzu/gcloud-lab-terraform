@@ -50,6 +50,7 @@ pipeline {
         steps {
           echo "Running Terraform..."
           sh '''
+            cd ..
             pwd
             ls
             source .env
