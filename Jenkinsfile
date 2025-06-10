@@ -34,15 +34,34 @@ pipeline {
         }
       }
 
+      stage('Fetch Secrets') {
+        steps {
+          sh '''
+            echo "Fetching secrets from Google Secret Manager..."
+
+            echo TF_VAR_DOCKER_USERNAME=$(gcloud secrets versions access latest --secret="docker-username") >> .env
+            echo TF_VAR_GITHUB_PAT=$(gcloud secrets versions access latest --secret="dockerhub-pat") >> .env
+            echo TF_VAR_FRUITS_ROOT_PASS=$(gcloud secrets versions access latest --secret="fruits-root-pass") >> .env
+          '''
+        }
+      }
+
       stage('Terraform') {
         steps {
-            echo "Authenticating with GCP..."
+          echo "Running Terraform..."
+          sh '''
+            source .env
+            terraform init
+            terraform validate
+            terraform plan -out=tfplan
+            terraform apply -auto-approve tfplan
+          '''
         }
       }
 
       stage('Return Secrets') {
         steps {
-            echo "Authenticating with GCP..."
+            echo "Returning secrets..."
         }
       }
       
