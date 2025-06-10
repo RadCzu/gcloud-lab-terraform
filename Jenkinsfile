@@ -27,22 +27,27 @@ pipeline {
             sh '''
               echo $HOME
               gcloud auth activate-service-account --key-file=$GCP_KEY
-              gcloud config set project your-project-id
+              gcloud config set project devopstraining-459716
             '''
           }
         }
       }
 
       stage('Fetch Secrets') {
-        steps {
-          sh '''
-            echo "Fetching secrets from Google Secret Manager..."
+          steps {
+            sh '''
+              echo "Fetching secrets from Google Secret Manager..."
 
-            echo TF_VAR_DOCKER_USERNAME=$(gcloud secrets versions access latest --secret="docker-username") >> .env
-            echo TF_VAR_GITHUB_PAT=$(gcloud secrets versions access latest --secret="dockerhub-pat") >> .env
-            echo TF_VAR_FRUITS_ROOT_PASS=$(gcloud secrets versions access latest --secret="fruits-root-pass") >> .env
-          '''
-        }
+              echo TF_VAR_DOCKER_USERNAME=$(gcloud secrets versions access latest --secret="projects/333066469576/secrets/docker-username") >> .env
+              echo TF_VAR_GITHUB_PAT=$(gcloud secrets versions access latest --secret="dockerhub-pat") >> .env
+              echo TF_VAR_FRUITS_ROOT_PASS=$(gcloud secrets versions access latest --secret="fruits-root-pass") >> .env
+
+              # Verify the .env file content
+              echo "Contents of .env after writing:"
+              cat .env
+              echo "---END .env---"
+            '''
+          }
       }
 
       stage('Terraform') {
