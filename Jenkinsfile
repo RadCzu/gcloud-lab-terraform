@@ -1,6 +1,7 @@
 pipeline {
     environment {
         DOCKER_HOST = 'tcp://host.docker.internal:2375'
+        CLOUDSDK_CONFIG = "${WORKSPACE}/.gcloud"
     }
     agent {
         docker {
@@ -16,6 +17,7 @@ pipeline {
       stage('Prepare') {
         steps {
             cleanWs()
+            sh 'mkdir -p $CLOUDSDK_CONFIG'
         }
       }
 
