@@ -50,6 +50,7 @@ pipeline {
         steps {
           echo "Running Terraform..."
           sh '''
+            ls
             source .env
             terraform init
             terraform validate
