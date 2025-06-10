@@ -53,29 +53,32 @@ pipeline {
       }
 
       stage('Terraform') {
-        steps {
-          echo "Running Terraform..."
-          sh '''
-            while IFS='=' read -r key value; do
+        withCredentials([file(credentialsId: 'gcloud-sa-key', variable: 'GCP_KEY')]) {
+          steps {
+            echo "Running Terraform..."
+            sh '''
+              gcloud auth activate-service-account --key-file=$GCP_KEY
+              gcloud config set project devopstraining-459716
+              while IFS='=' read -r key value; do
 
-              #skip comments
-              if [[ -z "$key" || "$key" =~ ^# ]]; then
-                continue
-              fi
+                #skip comments
+                if [[ -z "$key" || "$key" =~ ^# ]]; then
+                  continue
+                fi
 
-              key=$(echo "$key" | xargs)
-              value=$(echo "$value" | xargs)
+                key=$(echo "$key" | xargs)
+                value=$(echo "$value" | xargs)
 
-              export "$key=$value"
-              echo "DEBUG: Exported: $key=********" # Mask sensitive info in logs for visibility
-            done < .env
-            echo "--- Environment variables set from .env ---"
+                export "$key=$value"
+              done < .env
+              echo "--- Environment variables set from .env ---"
 
-            terraform init
-            terraform validate
-            terraform plan -out=tfplan
-            terraform apply -auto-approve tfplan
-          '''
+              terraform init
+              terraform validate
+              terraform plan -out=tfplan
+              terraform apply -auto-approve tfplan
+            '''
+          }
         }
       }
 
