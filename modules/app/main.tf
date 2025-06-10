@@ -4,24 +4,6 @@ resource "google_service_account" "app_service_account" {
   project = var.project
 }
 
-resource "google_service_account" "secrets_service_account" {
-  account_id = "secrets-sa"
-  display_name = "Custom SA for saving and retrieving secrets"
-  project = var.project
-}
-
-resource "google_project_iam_member" "secrets_reader" {
-  project = var.project
-  role    = "roles/secretmanager.secretAccessor"
-  member  = "serviceAccount:${google_service_account.secrets_service_account.email}"
-}
-
-resource "google_project_iam_member" "secrets_writer" {
-  project = var.project
-  role    = "roles/secretmanager.secretManager"
-  member  = "serviceAccount:${google_service_account.secrets_service_account.email}"
-}
-
 resource "google_compute_instance" "default" {
   name         = "api-app-vm"
   machine_type = "n2-standard-2"
