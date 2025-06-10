@@ -16,7 +16,6 @@ pipeline {
 
       stage('Prepare') {
         steps {
-            cleanWs()
             sh 'mkdir -p $CLOUDSDK_CONFIG'
         }
       }
@@ -50,7 +49,6 @@ pipeline {
         steps {
           echo "Running Terraform..."
           sh '''
-            cd ..
             pwd
             ls
             source .env
