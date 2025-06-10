@@ -18,7 +18,7 @@ pipeline {
         steps {
             
             sh '''
-            
+
             rm -f .env
             mkdir -p $CLOUDSDK_CONFIG
             
@@ -48,10 +48,6 @@ pipeline {
               echo TF_VAR_GITHUB_PAT=$(gcloud secrets versions access latest --secret="dockerhub-pat") >> .env
               echo TF_VAR_FRUITS_ROOT_PASS=$(gcloud secrets versions access latest --secret="fruits-root-pass") >> .env
 
-              # Verify the .env file content
-              echo "Contents of .env after writing:"
-              cat .env
-              echo "---END .env---"
             '''
           }
       }
@@ -60,9 +56,21 @@ pipeline {
         steps {
           echo "Running Terraform..."
           sh '''
-            pwd
-            ls
-            source .env
+            while IFS='=' read -r key value; do
+
+              #skip comments
+              if [[ -z "$key" || "$key" =~ ^# ]]; then
+                continue
+              fi
+
+              key=$(echo "$key" | xargs)
+              value=$(echo "$value" | xargs)
+
+              export "$key=$value"
+              echo "DEBUG: Exported: $key=********" # Mask sensitive info in logs for visibility
+            done < .env
+            echo "--- Environment variables set from .env ---"
+
             terraform init
             terraform validate
             terraform plan -out=tfplan
