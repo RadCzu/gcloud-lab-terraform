@@ -16,6 +16,7 @@ pipeline {
 
       stage('Prepare') {
         steps {
+            rm -f .env
             sh 'mkdir -p $CLOUDSDK_CONFIG'
         }
       }
