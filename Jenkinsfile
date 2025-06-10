@@ -60,7 +60,7 @@ pipeline {
 
                 gcloud auth activate-service-account --key-file="$GCP_KEY"
                 gcloud config set project devopstraining-459716
-                GOOGLE_APPLICATION_CREDENTIALS="$GCP_KEY"
+                export GOOGLE_APPLICATION_CREDENTIALS="$GCP_KEY"
 
                 while IFS='=' read -r key value; do
 
