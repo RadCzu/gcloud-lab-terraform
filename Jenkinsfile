@@ -53,8 +53,8 @@ pipeline {
       }
 
       stage('Terraform') {
-        withCredentials([file(credentialsId: 'gcloud-sa-key', variable: 'GCP_KEY')]) {
-          steps {
+        steps {
+          withCredentials([file(credentialsId: 'gcloud-sa-key', variable: 'GCP_KEY')]) {
             echo "Running Terraform..."
             sh '''
               gcloud auth activate-service-account --key-file=$GCP_KEY
