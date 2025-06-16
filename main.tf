@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "google" {
-  project = "devopstraining-459716"
+  project = var.project
   region  = "us-central1"
 }
 
@@ -30,6 +30,12 @@ module "app_vm" {
   DOCKER_USERNAME  = var.DOCKER_USERNAME
   GITHUB_PAT = var.GITHUB_PAT
   db_host = module.sql_instance.public_ip
-  depends_on = [module.sql_instance]
-  project = "devopstraining-459716"
+  depends_on = [module.sql_database]
+  project = var.project
+}
+
+module "k8s_cluster" {
+  source = "./modules/k8s_cluster"
+  depends_on = [module.sql_database]
+  project = var.project
 }

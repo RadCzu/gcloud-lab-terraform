@@ -12,3 +12,9 @@ variable "GITHUB_PAT" {
   description = "GitHub PAT used as Docker password"
   sensitive   = true
 }
+
+variable "project" {
+  description = "project ID for GKE"
+  type    = string
+  default = "devopstraining-459716"
+}
