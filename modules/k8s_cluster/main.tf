@@ -8,18 +8,24 @@ resource "google_project_iam_member" "k8s_sa_node_role" {
   project = var.project
   role    = "roles/container.nodeServiceAccount"
   member  = "serviceAccount:${google_service_account.k8s_service_account.email}"
+
+  depends_on = [google_service_account.k8s_service_account]
 }
 
 resource "google_project_iam_member" "k8s_sa_log_writer" {
   project = var.project
   role    = "roles/logging.logWriter"
   member  = "serviceAccount:${google_service_account.k8s_service_account.email}"
+
+  depends_on = [google_service_account.k8s_service_account]
 }
 
 resource "google_project_iam_member" "k8s_sa_metric_writer" {
   project = var.project
   role    = "roles/monitoring.metricWriter"
   member  = "serviceAccount:${google_service_account.k8s_service_account.email}"
+
+  depends_on = [google_service_account.k8s_service_account]
 }
 
 resource "google_container_cluster" "primary" {
