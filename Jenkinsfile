@@ -77,7 +77,7 @@ pipeline {
                 done < .env
                 echo "--- Environment variables set from .env ---"
                 gcloud auth print-access-token --impersonate-service-account=$TF_SA_EMAIL > tf-access-token.txt
-                export TF_SA_ACCESS_TOKEN=$(cat tf-access-token.txt)
+                export TF_VAR_TF_SA_ACCESS_TOKEN=$(cat tf-access-token.txt)
 
                 terraform init
                 terraform validate
