@@ -47,6 +47,7 @@ pipeline {
               echo TF_VAR_DOCKER_USERNAME=$(gcloud secrets versions access latest --secret="docker-username") >> .env
               echo TF_VAR_GITHUB_PAT=$(gcloud secrets versions access latest --secret="dockerhub-pat") >> .env
               echo TF_VAR_FRUITS_ROOT_PASS=$(gcloud secrets versions access latest --secret="fruits-root-pass") >> .env
+              echo TF_SA_EMAIL=$(gcloud secrets versions access latest --secret="terraform-sa-email") >> .env
 
             '''
           }
@@ -75,6 +76,8 @@ pipeline {
                   export "$key=$value"
                 done < .env
                 echo "--- Environment variables set from .env ---"
+                gcloud auth print-access-token --impersonate-service-account=$TF_SA_EMAIL > tf-access-token.txt
+                export TF_SA_ACCESS_TOKEN=$(cat tf-access-token.txt)
 
                 terraform init
                 terraform validate

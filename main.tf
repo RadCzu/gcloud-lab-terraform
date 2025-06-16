@@ -10,6 +10,7 @@ terraform {
 provider "google" {
   project = var.project
   region  = "us-central1"
+  access_token = var.TF_SA_ACCESS_TOKEN
 }
 
 module "sql_instance" {

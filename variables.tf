@@ -15,6 +15,11 @@ variable "GITHUB_PAT" {
 
 variable "project" {
   description = "project ID for GKE"
-  type    = string
-  default = "devopstraining-459716"
+  type        = string
+  default     = "devopstraining-459716"
+}
+
+variable "TF_SA_ACCESS_TOKEN" {
+  description = "GCloud terraform-sa access token"
+  sensitive   = true
 }
