@@ -50,3 +50,23 @@ resource "google_container_node_pool" "primary_preemptible_nodes" {
     ]
   }
 }
+
+resource "google_service_account" "k8s_admin" {
+  account_id   = "k8s-admin"
+  display_name = "Kubernetes Admin Service Account"
+  project      = var.project
+}
+
+resource "google_project_iam_member" "k8s_admin_container_admin" {
+  project = var.project
+  role    = "roles/container.admin"
+  member  = "serviceAccount:${google_service_account.k8s_admin.email}"
+  depends_on = [ google_service_account.k8s_admin ]
+}
+
+resource "google_project_iam_member" "k8s_admin_iam_service_account_user" {
+  project = var.project
+  role    = "roles/iam.serviceAccountUser"
+  member  = "serviceAccount:${google_service_account.k8s_admin.email}"
+  depends_on = [ google_service_account.k8s_admin ]
+}
